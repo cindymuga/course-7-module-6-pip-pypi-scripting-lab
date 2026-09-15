@@ -1,30 +1,27 @@
-import sys
+from datetime import datetime
 import requests
 
-def fetch_data():
+def generate_log():
+    today_str = datetime.now().strftime("%Y%m%d")
+    filename = f"log_{today_str}.txt"
+
     url = "https://jsonplaceholder.typicode.com/todos/1"
     try:
         response = requests.get(url)
         response.raise_for_status()
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        print(f"Error fetching data: {e}")
-        return None
+        data = response.json()
 
-def save_output(data, filename="output.txt"):
-    try:
         with open(filename, "w") as file:
             file.write(f"Automation Output Results:\n{data}\n")
-        print(f"Successfully saved results to {filename}")
-    except IOError as e:
-        print(f"File writing error: {e}")
+
+        print(f"Successfully generated log: {filename}")
+        return filename
+    except Exception as e:
+        print(f"Error generating log: {e}")
+        return None
 
 def main():
-    print("Executing automation script...")
-    data = fetch_data()
-    if data:
-        print("Fetched Data:", data)
-        save_output(data)
+    generate_log()
 
 if __name__ == "__main__":
     main()
